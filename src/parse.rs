@@ -4,6 +4,7 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
     let tokens: Vec<char> = code.chars().filter(|c| !c.is_whitespace()).collect();
     let mut output: Vec<RPNToken> = Vec::new();
     let mut queue: Vec<RPNToken> = Vec::new();
+    let mut paren = false;
 
     for tok in tokens {
         if tok.is_numeric() {
@@ -11,6 +12,9 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
             output.push(rpnt)
         }else {
             let rpnt = RPNToken::new(RPNTokenType::Operator, tok);
+            if tok == '(' {
+                paren = true;
+            }
             let qe = match queue.clone().last() {
                 Some(v) => { v.value },
                 None => {
@@ -21,9 +25,26 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
 
             if Operator::from(tok).value() > Operator::from(qe).value() {
                 queue.push(rpnt)
-            } else {
+            } else if !paren {
                 output.push(queue.pop().unwrap());
                 queue.push(rpnt)
+            } else {
+                if tok == ')' {
+                    for t in queue.clone() {
+                        if t.value != '(' {
+                            let v = queue.pop().unwrap();
+                            if v.value != '(' || v.value != ')' {
+                                output.push(v);
+                            }
+                        } else {
+                            continue
+                        }
+                    }
+                } else {
+                    if rpnt.value != '(' {
+                        queue.push(rpnt);
+                    }
+                }
             }
         }
     }

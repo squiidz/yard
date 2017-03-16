@@ -1,8 +1,8 @@
 use std::char;
 use token::{RPNToken, RPNTokenType};
 
-pub fn eval(tokens: Vec<RPNToken>) -> u32 {
-    let mut stack: Vec<u32> = Vec::new();
+pub fn eval(tokens: Vec<RPNToken>) -> i32 {
+    let mut stack: Vec<i32> = Vec::new();
     for t in tokens {
         match t.value {
             '+' => {
@@ -17,7 +17,7 @@ pub fn eval(tokens: Vec<RPNToken>) -> u32 {
             '-' => {
                 let n1 = stack.pop().expect("Unable to pop");
                 let n2 = stack.pop().expect("Unable to pop");
-                stack.push(n1 - n2);
+                stack.push(n2 - n1);
             },
             '*' => {
                 let n1 = stack.pop().expect("Unable to pop");
@@ -27,14 +27,14 @@ pub fn eval(tokens: Vec<RPNToken>) -> u32 {
             '/' => {
                 let n1 = stack.pop().expect("Unable to pop");
                 let n2 = stack.pop().expect("Unable to pop");
-                stack.push(n1 / n2);
+                stack.push(n2 / n1);
             },
             '^' => {
                 let n1 = stack.pop().expect("Unable to pop");
                 let n2 = stack.pop().expect("Unable to pop");
-                stack.push(n1.pow(n2));
+                stack.push(n1.pow(n2 as u32));
             }
-            v @ _ => stack.push(v.to_digit(10).expect("Unable to convert")),
+            v @ _ => stack.push(v.to_digit(10).expect("Unable to convert") as i32),
         }
     }
 

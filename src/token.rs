@@ -22,6 +22,8 @@ pub enum Operator {
     MULTIPLY,
     DIVIDE,
     POW,
+    LPAREN,
+    RPAREN,
     INVALID,
 }
 
@@ -33,6 +35,8 @@ impl Operator {
             Operator::MULTIPLY => { 1 },
             Operator::DIVIDE => { 1 },
             Operator::POW => { 2 },
+            Operator::LPAREN => { 0 },
+            Operator::RPAREN => { 0 },
             _ => { panic!() },
         }
     }
@@ -46,6 +50,8 @@ impl From<char> for Operator {
             '*' => Operator::MULTIPLY,
             '/' => Operator::DIVIDE,
             '^' => Operator::POW,
+            '(' => Operator::LPAREN,
+            ')' => Operator::RPAREN,
             _ => Operator::INVALID,
         }
     }
