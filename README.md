@@ -3,3 +3,14 @@
 shunting yard algorithm in rust
 
 ![alt_tag](https://upload.wikimedia.org/wikipedia/commons/6/60/Walton_with_Leicester_-_Peterborough_East_train_geograph-2791492-by-Ben-Brooksbank.jpg)
+
+## Example
+``` rust
+extern crate yard;
+
+fn main() {
+  let equation = "1 + 2 * 3";
+  prinln!("{}", yard::evaluate(equation).unwrap());
+}
+
+```
