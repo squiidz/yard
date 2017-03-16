@@ -1,6 +1,7 @@
 [package]
-name = "shunting_yard"
+name = "yard"
 version = "0.1.0"
 authors = ["jchaput <piinkyz05@gmail.com>"]
+description = "shunting yarg in rust"
 
 [dependencies]

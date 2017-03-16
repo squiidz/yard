@@ -1,3 +1,6 @@
-pub mod token;
-pub mod parse;
-pub mod eval;
+mod token;
+mod parse;
+mod eval;
+
+pub use parse::parse;
+pub use eval::eval;

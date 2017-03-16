@@ -1,17 +1,17 @@
-extern crate shunting_yard;
+extern crate yard;
 
-use shunting_yard::{parse, eval};
+use yard::{parse, eval};
 use std::env;
 
 
 fn main() {
     let inp = env::args().collect::<Vec<String>>();
-    match parse::parse(inp.last().unwrap()) {
+    match parse(inp.last().unwrap()) {
         Ok(tokens) => {
             //for t in &tokens {
             //    print!("{} ", t.value);
             //}
-            println!("{}", eval::eval(tokens));
+            println!("{}", eval(tokens));
         },
         Err(_) => return,
     }
