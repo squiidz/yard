@@ -1,6 +1,13 @@
-mod token;
-mod parse;
-mod eval;
+pub mod token;
+pub mod parse;
+pub mod eval;
 
-pub use parse::parse;
-pub use eval::eval;
+use parse::parse;
+use eval::eval;
+
+pub fn evaluate(code: &str) -> Option<i32> {
+    match parse(code) {
+        Ok(tokens) => Some(eval(tokens)),
+        Err(_) => None,
+    }
+}
