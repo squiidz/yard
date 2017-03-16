@@ -1,8 +1,17 @@
 [package]
 name = "yard"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["jchaput <piinkyz05@gmail.com>"]
-description = "shunting yarg in rust"
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/squiidz/yard"
+repository = "https://github.com/squiidz/yard"
+description = "shunting yard implementation in rust"
+categories = ["parsing"]
+keywords = ["parser", "shunting_yard"]
+exclude = [
+    "benches"
+]
 
 [[bin]]
 doc = false
