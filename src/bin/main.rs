@@ -6,11 +6,8 @@ use std::env;
 
 fn main() {
     let inp = env::args().collect::<Vec<String>>();
-    match parse(inp.last().unwrap()) {
+    match parse(inp.last().expect("[ERROR] need a 1 argument")) {
         Ok(tokens) => {
-            //for t in &tokens {
-            //    print!("{} ", t.value);
-            //}
             println!("{}", eval(tokens));
         },
         Err(_) => return,

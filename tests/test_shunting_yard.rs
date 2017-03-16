@@ -67,3 +67,14 @@ fn test_multi_expressions() {
         Err(_) => panic!(),
     };
 }
+
+#[test]
+fn test_paren_as_first_expression() {
+    let equa = "(1 + 2) * 2";
+    match parse(equa) {
+        Ok(tokens) => {
+            assert_eq!(eval(tokens), 6);
+        },
+        Err(_) => panic!(),
+    };
+}

@@ -12,7 +12,10 @@ pub struct RPNToken {
 
 impl RPNToken {
     pub fn new(tt: RPNTokenType, val: char) -> RPNToken {
-        RPNToken{token_type: tt, value: val}
+        RPNToken{
+            token_type: tt,
+            value: val,
+        }
     }
 }
 
@@ -37,7 +40,7 @@ impl Operator {
             Operator::POW => { 2 },
             Operator::LPAREN => { 0 },
             Operator::RPAREN => { 0 },
-            _ => { panic!() },
+            _ => { 0 },
         }
     }
 }

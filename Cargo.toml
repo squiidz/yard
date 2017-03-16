@@ -4,4 +4,9 @@ version = "0.1.0"
 authors = ["jchaput <piinkyz05@gmail.com>"]
 description = "shunting yarg in rust"
 
+[[bin]]
+doc = false
+name = "yard"
+path = "src/bin/main.rs"
+
 [dependencies]

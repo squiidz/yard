@@ -36,21 +36,19 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
                             if v.value != '(' || v.value != ')' {
                                 output.push(v);
                             }
-                        } else {
-                            continue
                         }
                     }
-                } else {
-                    if rpnt.value != '(' {
-                        queue.push(rpnt);
-                    }
+                    queue.pop();
+                    paren = false;
+                } else if rpnt.value != '(' {
+                    queue.push(rpnt);
                 }
             }
         }
     }
 
     for _ in 0..queue.len() {
-        output.push(queue.pop().unwrap())
+        output.push(queue.pop().unwrap());
     }
 
     Ok(output)
