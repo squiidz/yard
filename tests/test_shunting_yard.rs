@@ -67,16 +67,16 @@ fn test_multi_digit() {
 
 #[test]
 fn test_negative_multi_digit() {
-    let equa = "-2--3-(-4--7)";
+    let equa = "-2--3-(-4--7)-5";
     let tokens = parse::parse(equa).unwrap();
-    assert_eq!(eval::eval(&tokens), -2);
+    assert_eq!(eval::eval(&tokens), -7);
 }
 
 #[test]
 fn test_multi_parens() {
     let equa = "2 ^ (2 + 3) * (4 + 5)";
     let tokens = parse::parse(equa).unwrap();
-    assert_eq!(eval::eval(&tokens), 640);
+    assert_eq!(eval::eval(&tokens), 288);
 }
 
 #[test]
@@ -84,4 +84,11 @@ fn test_nested_parens() {
     let equa = "2 ^ (2 * (3 + 4))";
     let tokens = parse::parse(equa).unwrap();
     assert_eq!(eval::eval(&tokens), 1<<14);
+}
+
+#[test]
+fn test_deep_stack() {
+    let equa = "1 - 2 + 3 * 4 * 5 + 6 - 7 + 8 - 9";
+    let tokens = parse::parse(equa).unwrap();
+    assert_eq!(eval::eval(&tokens), 1 - 2 + 3 * 4 * 5 + 6 - 7 + 8 - 9);
 }
