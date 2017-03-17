@@ -1,4 +1,4 @@
-use token::{Operator, RPNToken, RPNTokenType};
+use token::{Operator, RPNToken};
 
 pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
     let tokens = code.chars().filter(|c| !c.is_whitespace());
@@ -8,47 +8,50 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
 
     for tok in tokens {
         if tok.is_numeric() {
-            let rpnt = RPNToken::new(RPNTokenType::Operand, tok);
-            output.push(rpnt)
-        }else {
-            let rpnt = RPNToken::new(RPNTokenType::Operator, tok);
+            let rpnt = RPNToken::Operand(tok.to_digit(10).unwrap() as i32);
+            output.push(rpnt);
+        } else {
+            let tokop = Operator::from(tok);
+            let rpnt = RPNToken::Operator(tokop);
             if tok == '(' {
                 paren = true;
             }
             let qe = match queue.last() {
-                Some(&v) => { v.value },
+                Some(&RPNToken::Operator(v)) => { v },
+                Some(_) => continue,
                 None => {
                     queue.push(rpnt);
                     continue
                 },
             };
 
-            if Operator::from(tok).value() > Operator::from(qe).value() {
+            if tokop.value() > qe.value() {
                 queue.push(rpnt)
             } else if !paren {
                 output.push(queue.pop().unwrap());
                 queue.push(rpnt)
             } else {
-                if tok == ')' {
+                if tokop == Operator::RPAREN {
                     for t in queue.clone() {
-                        if t.value != '(' {
+                        if t != RPNToken::Operator(Operator::LPAREN) {
                             let v = queue.pop().unwrap();
-                            if v.value != '(' || v.value != ')' {
+                            if v != RPNToken::Operator(Operator::LPAREN) &&
+                                v != RPNToken::Operator(Operator::RPAREN) {
                                 output.push(v);
                             }
                         }
                     }
                     queue.pop();
                     paren = false;
-                } else if rpnt.value != '(' {
+                } else if tokop != Operator::LPAREN {
                     queue.push(rpnt);
                 }
             }
         }
     }
 
-    for _ in 0..queue.len() {
-        output.push(queue.pop().unwrap());
+    while let Some(v) = queue.pop() {
+        output.push(v);
     }
 
     Ok(output)

@@ -1,24 +1,10 @@
-#[derive(Debug, Clone, Copy)]
-pub enum RPNTokenType {
-    Operand,
-    Operator,
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+pub enum RPNToken {
+    Operator(Operator),
+    Operand(i32),
 }
 
-#[derive(Debug, Clone, Copy)]
-pub struct RPNToken {
-    token_type: RPNTokenType,
-    pub value: char,
-}
-
-impl RPNToken {
-    pub fn new(tt: RPNTokenType, val: char) -> RPNToken {
-        RPNToken{
-            token_type: tt,
-            value: val,
-        }
-    }
-}
-
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum Operator {
     PLUS,
     MINUS,
@@ -27,7 +13,7 @@ pub enum Operator {
     POW,
     LPAREN,
     RPAREN,
-    INVALID,
+    INVALID(char),
 }
 
 impl Operator {
@@ -40,7 +26,7 @@ impl Operator {
             Operator::POW => { 2 },
             Operator::LPAREN => { 0 },
             Operator::RPAREN => { 0 },
-            _ => { 0 },
+            Operator::INVALID(_) => { 0 },
         }
     }
 }
@@ -55,7 +41,7 @@ impl From<char> for Operator {
             '^' => Operator::POW,
             '(' => Operator::LPAREN,
             ')' => Operator::RPAREN,
-            _ => Operator::INVALID,
+            c => Operator::INVALID(c),
         }
     }
 }
