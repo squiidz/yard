@@ -4,13 +4,18 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
     let tokens = code.chars().filter(|c| !c.is_whitespace());
     let mut output: Vec<RPNToken> = Vec::new();
     let mut queue: Vec<RPNToken> = Vec::new();
+    let mut num: String = String::new();
     let mut paren = false;
 
     for tok in tokens {
         if tok.is_numeric() {
-            let rpnt = RPNToken::Operand(tok.to_digit(10).unwrap() as i32);
-            output.push(rpnt);
+            num.push(tok);
         } else {
+            if !num.is_empty() {
+                let rpnt = RPNToken::Operand(num.parse().expect("Integer out of range"));
+                output.push(rpnt);
+                num.clear();
+            }
             let tokop = Operator::from(tok);
             let rpnt = RPNToken::Operator(tokop);
             if tok == '(' {
@@ -48,6 +53,12 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
                 }
             }
         }
+    }
+
+    if !num.is_empty() {
+        let rpnt = RPNToken::Operand(num.parse().expect("Integer out of range"));
+        output.push(rpnt);
+        num.clear();
     }
 
     while let Some(v) = queue.pop() {

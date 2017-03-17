@@ -59,6 +59,20 @@ fn test_evaluate_fn() {
 }
 
 #[test]
+fn test_multi_digit() {
+    let equa = "23 + 42 * 11";
+    let tokens = parse::parse(equa).unwrap();
+    assert_eq!(eval::eval(&tokens), 485);
+}
+
+#[test]
+fn test_negative_multi_digit() {
+    let equa = "-2--3-(-4--7)";
+    let tokens = parse::parse(equa).unwrap();
+    assert_eq!(eval::eval(&tokens), -2);
+}
+
+#[test]
 fn test_multi_parens() {
     let equa = "2 ^ (2 + 3) * (4 + 5)";
     let tokens = parse::parse(equa).unwrap();
