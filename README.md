@@ -10,7 +10,7 @@ extern crate yard;
 
 fn main() {
   let equation = "1 + 2 * 3";
-  prinln!("{}", yard::evaluate(equation).unwrap());
+  println!("{}", yard::evaluate(equation).unwrap());
 }
 
 ```
