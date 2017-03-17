@@ -31,7 +31,6 @@ pub fn eval(tokens: &[RPNToken]) -> i32 {
             }
             RPNToken::Operator(Operator::LPAREN) => panic!("Stray ( in eval"),
             RPNToken::Operator(Operator::RPAREN) => panic!("Stray ) in eval"),
-            RPNToken::Operator(Operator::INVALID(c)) => panic!("Invalid operator: {}", c),
             RPNToken::Operand(v) => stack.push(v),
         }
     }
