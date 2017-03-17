@@ -1,3 +1,4 @@
+use std::error::Error;
 use token::{Operator, RPNToken};
 
 pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
@@ -18,43 +19,46 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
                 continue;
             }
             if !num.is_empty() {
-                let rpnt = RPNToken::Operand(num.parse().expect("Integer out of range"));
+                let rpnt = RPNToken::Operand(num.parse::<i32>().map_err(|err| err.description().to_string())?);
                 output.push(rpnt);
                 num.clear();
             }
-            let tokop = Operator::from(tok);
 
-            if tokop == Operator::LPAREN {
-                stack.push(tokop);
-                neg = true;
-            } else if tokop == Operator::RPAREN {
-                while let Some(v) = stack.pop() {
-                    if v == Operator::LPAREN {
-                        break
+            match Operator::try_from_char(tok) { 
+                Some(Operator::LPAREN) => {
+                    stack.push(Operator::LPAREN);
+                    neg = true;
+                },
+                Some(Operator::RPAREN) => {
+                    while let Some(v) = stack.pop() {
+                        if v == Operator::LPAREN {
+                            break
+                        }
+                        assert!(v != Operator::RPAREN);
+                        output.push(RPNToken::Operator(v));
                     }
-                    assert!(v != Operator::RPAREN);
-                    output.push(RPNToken::Operator(v));
-                }
-            } else {
-                while {
-                    if let Some(&qe) = stack.last() {
-                        tokop.value() <= qe.value()
-                    } else {
-                        false
+                },
+                Some(tokop) => {
+                    while {
+                        if let Some(&qe) = stack.last() {
+                            tokop.value() <= qe.value()
+                        } else {
+                            false
+                        }
+                    } {
+                        output.push(RPNToken::Operator(stack.pop().unwrap()));
                     }
-                } {
-                    output.push(RPNToken::Operator(stack.pop().unwrap()));
-                }
-                stack.push(tokop);
-                neg = true;
+                    stack.push(tokop);
+                    neg = true;
+                },
+                None => return Err(format!("Unexpected character: {}", tok)),
             }
         }
     }
 
     if !num.is_empty() {
-        let rpnt = RPNToken::Operand(num.parse().expect("Integer out of range"));
+        let rpnt = RPNToken::Operand(num.parse::<i32>().map_err(|err| err.description().to_string())?);
         output.push(rpnt);
-        num.clear();
     }
 
     while let Some(v) = stack.pop() {
