@@ -1,10 +1,10 @@
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum RPNTokenType {
     Operand,
     Operator,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct RPNToken {
     token_type: RPNTokenType,
     pub value: char,

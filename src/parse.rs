@@ -1,7 +1,7 @@
 use token::{Operator, RPNToken, RPNTokenType};
 
 pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
-    let tokens: Vec<char> = code.chars().filter(|c| !c.is_whitespace()).collect();
+    let tokens = code.chars().filter(|c| !c.is_whitespace());
     let mut output: Vec<RPNToken> = Vec::new();
     let mut queue: Vec<RPNToken> = Vec::new();
     let mut paren = false;
@@ -15,8 +15,8 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
             if tok == '(' {
                 paren = true;
             }
-            let qe = match queue.clone().last() {
-                Some(v) => { v.value },
+            let qe = match queue.last() {
+                Some(&v) => { v.value },
                 None => {
                     queue.push(rpnt);
                     continue
