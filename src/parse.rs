@@ -1,54 +1,64 @@
-use token::{Operator, RPNToken, RPNTokenType};
+use token::{Operator, RPNToken};
 
 pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
     let tokens = code.chars().filter(|c| !c.is_whitespace());
     let mut output: Vec<RPNToken> = Vec::new();
-    let mut queue: Vec<RPNToken> = Vec::new();
-    let mut paren = false;
+    let mut stack: Vec<Operator> = Vec::new();
+    let mut num: String = String::new();
+    let mut neg = true;
 
     for tok in tokens {
         if tok.is_numeric() {
-            let rpnt = RPNToken::new(RPNTokenType::Operand, tok);
-            output.push(rpnt)
-        }else {
-            let rpnt = RPNToken::new(RPNTokenType::Operator, tok);
-            if tok == '(' {
-                paren = true;
+            num.push(tok);
+            neg = false;
+        } else {
+            if tok == '-' && neg {
+                num.push('-');
+                neg = false;
+                continue;
             }
-            let qe = match queue.last() {
-                Some(&v) => { v.value },
-                None => {
-                    queue.push(rpnt);
-                    continue
-                },
-            };
+            if !num.is_empty() {
+                let rpnt = RPNToken::Operand(num.parse().expect("Integer out of range"));
+                output.push(rpnt);
+                num.clear();
+            }
+            let tokop = Operator::from(tok);
 
-            if Operator::from(tok).value() > Operator::from(qe).value() {
-                queue.push(rpnt)
-            } else if !paren {
-                output.push(queue.pop().unwrap());
-                queue.push(rpnt)
-            } else {
-                if tok == ')' {
-                    for t in queue.clone() {
-                        if t.value != '(' {
-                            let v = queue.pop().unwrap();
-                            if v.value != '(' || v.value != ')' {
-                                output.push(v);
-                            }
-                        }
+            if tokop == Operator::LPAREN {
+                stack.push(tokop);
+                neg = true;
+            } else if tokop == Operator::RPAREN {
+                while let Some(v) = stack.pop() {
+                    if v == Operator::LPAREN {
+                        break
                     }
-                    queue.pop();
-                    paren = false;
-                } else if rpnt.value != '(' {
-                    queue.push(rpnt);
+                    assert!(v != Operator::RPAREN);
+                    output.push(RPNToken::Operator(v));
                 }
+            } else {
+                while {
+                    if let Some(&qe) = stack.last() {
+                        tokop.value() <= qe.value()
+                    } else {
+                        false
+                    }
+                } {
+                    output.push(RPNToken::Operator(stack.pop().unwrap()));
+                }
+                stack.push(tokop);
+                neg = true;
             }
         }
     }
 
-    for _ in 0..queue.len() {
-        output.push(queue.pop().unwrap());
+    if !num.is_empty() {
+        let rpnt = RPNToken::Operand(num.parse().expect("Integer out of range"));
+        output.push(rpnt);
+        num.clear();
+    }
+
+    while let Some(v) = stack.pop() {
+        output.push(RPNToken::Operator(v));
     }
 
     Ok(output)
