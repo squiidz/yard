@@ -5,9 +5,9 @@ pub mod eval;
 use parse::parse;
 use eval::eval;
 
-pub fn evaluate(code: &str) -> Option<i32> {
+pub fn evaluate(code: &str) -> Result<i32, String> {
     match parse(code) {
-        Ok(tokens) => Some(eval(tokens)),
-        Err(_) => None,
+        Ok(tokens) => Ok(eval(tokens)),
+        Err(e) => Err(e),
     }
 }
