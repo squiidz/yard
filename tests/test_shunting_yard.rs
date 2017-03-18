@@ -92,3 +92,10 @@ fn test_deep_stack() {
     let tokens = parse::parse(equa).unwrap();
     assert_eq!(eval::eval(&tokens), 1 - 2 + 3 * 4 * 5 + 6 - 7 + 8 - 9);
 }
+
+#[test]
+fn test_error() {
+    let equa = "9999999999999999999999 + 235";
+    let tokens = parse::parse(equa);
+    assert!(tokens.is_err());
+}

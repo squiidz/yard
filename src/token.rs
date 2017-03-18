@@ -13,7 +13,6 @@ pub enum Operator {
     POW,
     LPAREN,
     RPAREN,
-    INVALID(char),
 }
 
 impl Operator {
@@ -26,14 +25,12 @@ impl Operator {
             Operator::POW => 3,
             Operator::LPAREN => 0,
             Operator::RPAREN => 0,
-            Operator::INVALID(_) => 0,
         }
     }
-}
 
-impl From<char> for Operator {
-    fn from(c: char) -> Self {
-        match c {
+    // Until std::convert::TryFrom stabilizes
+    pub fn try_from_char(c: char) -> Option<Operator> {
+        Some(match c {
             '+' => Operator::PLUS,
             '-' => Operator::MINUS,
             '*' => Operator::MULTIPLY,
@@ -41,7 +38,7 @@ impl From<char> for Operator {
             '^' => Operator::POW,
             '(' => Operator::LPAREN,
             ')' => Operator::RPAREN,
-            c => Operator::INVALID(c),
-        }
+            _ => return None,
+        })
     }
 }
