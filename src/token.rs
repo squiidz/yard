@@ -1,9 +1,11 @@
+/// RPNToken enum define a Operator and Operand variants.
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum RPNToken {
     Operator(Operator),
     Operand(i32),
 }
 
+/// Operator enum define the allowed operations.
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum Operator {
     PLUS,
@@ -16,6 +18,7 @@ pub enum Operator {
 }
 
 impl Operator {
+    /// return the associated value of an Operator variant.
     pub fn value(&self) -> u32 {
         match *self {
             Operator::LPAREN | Operator::RPAREN => 0,
@@ -25,6 +28,7 @@ impl Operator {
         }
     }
 
+    /// try to convert a char to an Operator variant.
     // Until std::convert::TryFrom stabilizes
     pub fn try_from_char(c: char) -> Option<Operator> {
         Some(match c {

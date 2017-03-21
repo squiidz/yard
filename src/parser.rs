@@ -1,6 +1,8 @@
 use std::error::Error;
 use token::{Operator, RPNToken};
 
+/// parse try to convert char into RPNToken
+/// it strip whitespace and support negative operations.
 pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
     let tokens = code.chars().filter(|c| !c.is_whitespace());
     let mut output: Vec<RPNToken> = Vec::new();

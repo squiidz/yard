@@ -1,5 +1,19 @@
 use token::{RPNToken, Operator};
 
+/// eval process RPNToken provided by the parser and returned the value of the operation.
+/// #Example
+/// ```rust
+///
+/// fn main() {
+///     let code = "3 + 4";
+///     if let Ok(tokens) = yard::parse(&code) {
+///         if let(result) = yard::eval(&tokens) {
+///             println!("{}", result);
+///         }
+///     }
+/// }
+/// ```
+/// for normal usage, evaluate should be use instead.
 pub fn eval(tokens: &[RPNToken]) -> i32 {
     let mut stack: Vec<i32> = Vec::new();
     for t in tokens {
