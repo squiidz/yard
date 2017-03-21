@@ -3,13 +3,14 @@ use token::{RPNToken, Operator};
 /// eval process RPNToken provided by the parser and returned the value of the operation.
 /// #Example
 /// ```rust
+/// extern crate yard;
+/// use yard::{parser, evaluator};
 ///
 /// fn main() {
 ///     let code = "3 + 4";
-///     if let Ok(tokens) = yard::parse(&code) {
-///         if let(result) = yard::eval(&tokens) {
-///             println!("{}", result);
-///         }
+///     if let Ok(tokens) = parser::parse(&code) {
+///         let result = evaluator::eval(&tokens);
+///         println!("{}", result);
 ///     }
 /// }
 /// ```

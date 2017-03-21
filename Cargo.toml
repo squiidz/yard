@@ -1,11 +1,12 @@
 [package]
 name = "yard"
-version = "0.2.2"
+version = "0.2.4"
 authors = ["jchaput <piinkyz05@gmail.com>"]
 readme = "README.md"
 license = "MIT"
 homepage = "https://github.com/squiidz/yard"
 repository = "https://github.com/squiidz/yard"
+documentation = "https://docs.rs/yard"
 description = "shunting yard implementation in rust"
 categories = ["parsing"]
 keywords = ["parser", "shunting_yard"]
