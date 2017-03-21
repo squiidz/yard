@@ -18,13 +18,10 @@ pub enum Operator {
 impl Operator {
     pub fn value(&self) -> u32 {
         match *self {
-            Operator::PLUS => 1,
-            Operator::MINUS => 1,
-            Operator::MULTIPLY => 2,
-            Operator::DIVIDE => 2,
+            Operator::LPAREN | Operator::RPAREN => 0,
+            Operator::PLUS | Operator::MINUS => 1,
+            Operator::MULTIPLY | Operator::DIVIDE => 2,
             Operator::POW => 3,
-            Operator::LPAREN => 0,
-            Operator::RPAREN => 0,
         }
     }
 

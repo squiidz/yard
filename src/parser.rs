@@ -24,7 +24,7 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
                 num.clear();
             }
 
-            match Operator::try_from_char(tok) { 
+            match Operator::try_from_char(tok) {
                 Some(Operator::LPAREN) => {
                     stack.push(Operator::LPAREN);
                     neg = true;
@@ -34,7 +34,7 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
                         if v == Operator::LPAREN {
                             break
                         }
-                        assert!(v != Operator::RPAREN);
+                        assert_ne!(v, Operator::RPAREN);
                         output.push(RPNToken::Operator(v));
                     }
                 },
