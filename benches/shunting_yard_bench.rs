@@ -51,3 +51,16 @@ fn bench_nested_operation(b: &mut test::Bencher) {
         }
     });
 }
+
+#[bench]
+fn bench_formatted_operation(b: &mut test::Bencher) {
+    let first = "4 * 5";
+    let second = "1 + 5";
+    let code = format!("{} + {}", first, second);
+
+    b.iter(|| {
+        if let Ok(t) = yard::evaluate(&code) {
+            assert_eq!(t, 26);
+        }
+    });
+}
