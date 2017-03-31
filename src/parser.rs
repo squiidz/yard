@@ -21,7 +21,7 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
                 continue;
             }
             if !num.is_empty() {
-                let rpnt = RPNToken::Operand(num.parse::<i32>().map_err(|err| err.description().to_string())?);
+                let rpnt = RPNToken::Operand(num.parse::<i64>().map_err(|err| err.description().to_string())?);
                 output.push(rpnt);
                 num.clear();
             }
@@ -59,7 +59,7 @@ pub fn parse(code: &str) -> Result<Vec<RPNToken>, String> {
     }
 
     if !num.is_empty() {
-        let rpnt = RPNToken::Operand(num.parse::<i32>().map_err(|err| err.description().to_string())?);
+        let rpnt = RPNToken::Operand(num.parse::<i64>().map_err(|err| err.description().to_string())?);
         output.push(rpnt);
     }
 

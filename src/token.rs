@@ -2,7 +2,7 @@
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum RPNToken {
     Operator(Operator),
-    Operand(i32),
+    Operand(i64),
 }
 
 /// Operator enum define the allowed operations.

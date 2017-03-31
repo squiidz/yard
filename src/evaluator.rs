@@ -15,8 +15,8 @@ use token::{RPNToken, Operator};
 /// }
 /// ```
 /// for normal usage, evaluate should be use instead.
-pub fn eval(tokens: &[RPNToken]) -> i32 {
-    let mut stack: Vec<i32> = Vec::new();
+pub fn eval(tokens: &[RPNToken]) -> i64 {
+    let mut stack: Vec<i64> = Vec::new();
     for t in tokens {
         match *t {
             RPNToken::Operator(Operator::PLUS) => {

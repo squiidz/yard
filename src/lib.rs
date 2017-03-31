@@ -18,7 +18,7 @@ use evaluator::eval;
 ///     }
 /// }
 /// ```
-pub fn evaluate(code: &str) -> Result<i32, String> {
+pub fn evaluate(code: &str) -> Result<i64, String> {
     match parse(code) {
         Ok(tokens) => Ok(eval(&tokens)),
         Err(e) => Err(e),
