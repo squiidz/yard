@@ -20,3 +20,4 @@ name = "yard"
 path = "src/bin/main.rs"
 
 [dependencies]
+lazy_static = "0.2.6"

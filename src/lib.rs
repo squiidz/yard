@@ -1,5 +1,8 @@
 //! Evaluate arithmetic operations of a string,
 //! based on the shunting yard algorithm.
+#[macro_use]
+extern crate lazy_static;
+
 pub mod token;
 pub mod parser;
 pub mod evaluator;
