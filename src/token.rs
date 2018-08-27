@@ -1,8 +1,10 @@
+use num::Num;
+
 /// RPNToken enum define a Operator and Operand variants.
 #[derive(Debug, Clone, Copy, Eq, PartialEq)]
-pub enum RPNToken {
+pub enum RPNToken<T: Num + Clone> {
     Operator(Operator),
-    Operand(i64),
+    Operand(T),
 }
 
 /// Operator enum define the allowed operations.

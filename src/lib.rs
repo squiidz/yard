@@ -1,9 +1,13 @@
 //! Evaluate arithmetic operations of a string,
 //! based on the shunting yard algorithm.
+extern crate num;
+
 pub mod token;
 pub mod parser;
 pub mod evaluator;
 
+use std::str::FromStr;
+use num::Num;
 use parser::parse;
 use evaluator::eval;
 
@@ -18,9 +22,9 @@ use evaluator::eval;
 ///     }
 /// }
 /// ```
-pub fn evaluate(code: &str) -> Result<i64, String> {
-    match parse(code) {
-        Ok(tokens) => Ok(eval(&tokens)),
+pub fn evaluate<T: Num + FromStr + Clone>(code: &str) -> Result<T, String> {
+    match parse::<T>(code) {
+        Ok(tokens) => Ok(eval::<T>(&tokens)),
         Err(e) => Err(e),
     }
 }

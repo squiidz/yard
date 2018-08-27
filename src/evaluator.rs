@@ -1,3 +1,5 @@
+use std::str::FromStr;
+use num::Num;
 use token::{RPNToken, Operator};
 
 /// eval process RPNToken provided by the parser and returned the value of the operation.
@@ -15,10 +17,10 @@ use token::{RPNToken, Operator};
 /// }
 /// ```
 /// for normal usage, evaluate should be use instead.
-pub fn eval(tokens: &[RPNToken]) -> i64 {
-    let mut stack: Vec<i64> = Vec::new();
+pub fn eval<T: Num + FromStr + Clone + >(tokens: &[RPNToken<T>]) -> T {
+    let mut stack: Vec<T> = Vec::new();
     for t in tokens {
-        match *t {
+        match t {
             RPNToken::Operator(Operator::PLUS) => {
                 let n1 = stack.pop().expect("Unbalanced addition");
                 let n2 = stack.pop().expect("Unbalanced addition");
@@ -40,15 +42,16 @@ pub fn eval(tokens: &[RPNToken]) -> i64 {
                 stack.push(n2 / n1);
             },
             RPNToken::Operator(Operator::POW) => {
-                let n1 = stack.pop().expect("Unbalanced power");
-                let n2 = stack.pop().expect("Unbalanced power");
-                stack.push(n2.pow(n1 as u32));
+                let _n1 = stack.pop().expect("Unbalanced power");
+                let _n2 = stack.pop().expect("Unbalanced power");
+                // TODO: add pow with T 
+                // stack.push(pow::<T>(n2, n1));
             }
             RPNToken::Operator(Operator::LPAREN) => panic!("Stray ( in eval"),
             RPNToken::Operator(Operator::RPAREN) => panic!("Stray ) in eval"),
-            RPNToken::Operand(v) => stack.push(v),
+            RPNToken::Operand(v) => stack.push(v.clone()),
         }
     }
 
-    *stack.last().unwrap()
+    stack.last().unwrap().clone()
 }
