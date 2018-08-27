@@ -11,7 +11,7 @@ use token::{RPNToken, Operator};
 /// fn main() {
 ///     let code = "3 + 4";
 ///     if let Ok(tokens) = parser::parse(&code) {
-///         let result = evaluator::eval(&tokens);
+///         let result = evaluator::eval::<i32>(&tokens);
 ///         println!("{}", result);
 ///     }
 /// }

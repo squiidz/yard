@@ -17,7 +17,7 @@ use evaluator::eval;
 ///
 /// fn main() {
 ///     let code = "3 + 4";
-///     if let Ok(total) = yard::evaluate(&code) {
+///     if let Ok(total) = yard::evaluate::<i32>(&code) {
 ///         println!("{}", total);
 ///     }
 /// }
