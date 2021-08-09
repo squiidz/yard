@@ -17,7 +17,7 @@ use token::{RPNToken, Operator};
 /// }
 /// ```
 /// for normal usage, evaluate should be use instead.
-pub fn eval<T: Num + FromStr + Clone + >(tokens: &[RPNToken<T>]) -> T {
+pub fn eval<T: Num + FromStr + Clone + Into<i64>>(tokens: &[RPNToken<T>]) -> T {
     let mut stack: Vec<T> = Vec::new();
     for t in tokens {
         match t {
@@ -42,10 +42,9 @@ pub fn eval<T: Num + FromStr + Clone + >(tokens: &[RPNToken<T>]) -> T {
                 stack.push(n2 / n1);
             },
             RPNToken::Operator(Operator::POW) => {
-                let _n1 = stack.pop().expect("Unbalanced power");
-                let _n2 = stack.pop().expect("Unbalanced power");
-                // TODO: add pow with T 
-                // stack.push(pow::<T>(n2, n1));
+                let n1 = stack.pop().expect("Unbalanced power");
+                let n2 = stack.pop().expect("Unbalanced power");
+                stack.push(num::pow(n2, n1.into() as usize));
             }
             RPNToken::Operator(Operator::LPAREN) => panic!("Stray ( in eval"),
             RPNToken::Operator(Operator::RPAREN) => panic!("Stray ) in eval"),
