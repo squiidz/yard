@@ -1,6 +1,6 @@
 [package]
 name = "yard"
-version = "0.2.4"
+version = "1.0.0"
 authors = ["jchaput <piinkyz05@gmail.com>"]
 readme = "README.md"
 license = "MIT"
