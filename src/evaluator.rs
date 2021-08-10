@@ -17,7 +17,7 @@ use token::{RPNToken, Operator};
 /// }
 /// ```
 /// for normal usage, evaluate should be use instead.
-pub fn eval<T: Num + FromStr + Clone + Into<i64>>(tokens: &[RPNToken<T>]) -> T {
+pub fn eval<T: Num + FromStr + Clone + Into<f64>>(tokens: &[RPNToken<T>]) -> T {
     let mut stack: Vec<T> = Vec::new();
     for t in tokens {
         match t {

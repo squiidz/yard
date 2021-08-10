@@ -6,7 +6,7 @@ use std::io::prelude::*;
 fn main() {
     let inp = env::args().collect::<Vec<String>>();
     if inp.len() >= 2 {
-        match yard::evaluate::<u16>(inp.last().unwrap()) {
+        match yard::evaluate::<f64>(inp.last().unwrap()) {
             Ok(v) => println!("{}", v),
             Err(e) => println!("{}", e),
         }
@@ -19,6 +19,7 @@ fn main() {
 fn repl() {
     let inp = io::stdin();
     let mut inp = inp.lock();
+    //let mut last_line: String;
 
     loop {
         print!(">>> ");
@@ -26,8 +27,11 @@ fn repl() {
         let mut buff = String::new();
         match inp.read_line(&mut buff) {
             Ok(_) => {
-                match yard::evaluate::<u16>(&buff) {
-                    Ok(v) => println!("{}", v),
+                match yard::evaluate::<f64>(&buff) {
+                    Ok(v) => {
+                        // last_line = buff.to_string();
+                        println!("{}", v)
+                    },
                     Err(e) => println!("{}", e),
                 }
             },

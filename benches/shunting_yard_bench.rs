@@ -6,8 +6,8 @@ extern crate yard;
 fn bench_simple_operation(b: &mut test::Bencher) {
     let code = "4 + 3";
     b.iter(|| {
-        if let Ok(t) = yard::evaluate::<u32>(code) {
-            assert_eq!(t, 7);
+        if let Ok(t) = yard::evaluate::<f64>(code) {
+            assert_eq!(t, 7.0);
         }
     });
 }
@@ -17,7 +17,6 @@ fn bench_complex_operation(b: &mut test::Bencher) {
     let code = "4 + 3 * (1 + 4) + 2 ^ 3";
     b.iter(|| {
         if let Ok(t) = yard::evaluate::<u32>(code) {
-            print!("{:?}",t);
             assert_eq!(t, 27);
         }
     });

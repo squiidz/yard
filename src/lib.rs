@@ -22,7 +22,7 @@ use evaluator::eval;
 ///     }
 /// }
 /// ```
-pub fn evaluate<T>(code: &str) -> Result<T, String> where T: Num + FromStr + Clone + Into<i64> {
+pub fn evaluate<T>(code: &str) -> Result<T, String> where T: Num + FromStr + Clone + Into<f64> {
     match parse::<T>(code) {
         Ok(tokens) => Ok(eval::<T>(&tokens)),
         Err(e) => Err(e),
