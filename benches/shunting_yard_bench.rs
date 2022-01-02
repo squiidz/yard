@@ -53,6 +53,16 @@ fn bench_nested_operation(b: &mut test::Bencher) {
 }
 
 #[bench]
+fn bench_nested_complex_operation(b: &mut test::Bencher) {
+    let code = "4 * (3 + (7 * (3 - 1) / 2)) + 8) ^ 2 / 3 + 3.45";
+    b.iter(|| {
+        if let Ok(t) = yard::evaluate::<u32>(code) {
+            assert_eq!(t, 48);
+        }
+    });
+}
+
+#[bench]
 fn bench_formatted_operation(b: &mut test::Bencher) {
     let first = "4 * 5";
     let second = "1 + 5";

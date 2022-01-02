@@ -1,6 +1,6 @@
 extern crate yard;
 
-use yard::{parser, evaluator};
+use yard::{evaluator, parser};
 
 #[test]
 fn test_minus() {
@@ -90,7 +90,7 @@ fn test_nested_parens() {
 fn test_deep_stack() {
     let equa = "1 - 2 + 3 * 4 * 5 + 6 - 7 + 8 - 9";
     let tokens = parser::parse::<i32>(equa).unwrap();
-    assert_eq!(evaluator::eval(&tokens), 1 - 2 + 3 * 4 * 5 + 6 - 7 + 8 - 9);
+    assert_eq!(evaluator::eval(&tokens), 57);
 }
 
 #[test]
@@ -98,4 +98,81 @@ fn test_error() {
     let equa = "9999999999999999999999 + 235";
     let tokens = parser::parse::<u64>(equa);
     assert!(tokens.is_err());
+}
+
+#[test]
+fn test_power() {
+    let equa = "2 ^ 3";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), 8);
+}
+
+#[test]
+fn test_power_with_parens() {
+    let equa = "2 ^ (3 + 4)";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), 128);
+}
+
+#[test]
+fn complex_expression() {
+    let equa = "2 ^ (3 + 4) * (5 + 6) / 2";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), 704);
+}
+
+#[test]
+fn test_negative_number() {
+    let equa = "-2";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), -2);
+}
+
+#[test]
+fn test_negative_number_with_parens() {
+    let equa = "(-2)";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), -2);
+}
+
+#[test]
+fn test_negative_number_with_parens_and_power() {
+    let equa = "(-2) ^ 3";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), -8);
+}
+
+#[test]
+fn test_negative_number_with_parens_and_power_and_parens() {
+    let equa = "(-2) ^ (3 + 4)";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), -128);
+}
+
+#[test]
+fn test_negative_number_with_parens_and_power_2() {
+    let equa = "(-2) ^ ((3 + 4))";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), -128);
+}
+
+#[test]
+fn test_negative_number_with_parens_and_power_3() {
+    let equa = "(-2) ^ ((3 + 4)) * (5 + 6)";
+    let tokens = parser::parse::<i32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), -1408);
+}
+
+#[test]
+fn test_int_and_float() {
+    let equa = "3 + 4.5";
+    let tokens = parser::parse::<f32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), 7.5);
+}
+
+#[test]
+fn test_complex_int_and_float() {
+    let equa = "3 + 4.5 * 2 - 1 / 2 ^ 2";
+    let tokens = parser::parse::<f32>(equa).unwrap();
+    assert_eq!(evaluator::eval(&tokens), 11.75);
 }

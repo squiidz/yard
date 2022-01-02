@@ -1,5 +1,5 @@
-use std::str::FromStr;
 use num::Num;
+use std::str::FromStr;
 use token::{Operator, RPNToken};
 
 /// parse try to convert char into RPNToken
@@ -12,7 +12,7 @@ pub fn parse<T: Num + FromStr + Clone>(code: &str) -> Result<Vec<RPNToken<T>>, S
     let mut neg = true;
 
     for tok in tokens {
-        if tok.is_numeric() || tok == '.'{
+        if tok.is_numeric() || tok == '.' {
             num.push(tok);
             neg = false;
         } else {
@@ -35,16 +35,16 @@ pub fn parse<T: Num + FromStr + Clone>(code: &str) -> Result<Vec<RPNToken<T>>, S
                 Some(Operator::LPAREN) => {
                     stack.push(Operator::LPAREN);
                     neg = true;
-                },
+                }
                 Some(Operator::RPAREN) => {
                     while let Some(v) = stack.pop() {
                         if v == Operator::LPAREN {
-                            break
+                            break;
                         }
                         assert_ne!(v, Operator::RPAREN);
                         output.push(RPNToken::Operator(v));
                     }
-                },
+                }
                 Some(tokop) => {
                     while {
                         if let Some(&qe) = stack.last() {
@@ -57,7 +57,7 @@ pub fn parse<T: Num + FromStr + Clone>(code: &str) -> Result<Vec<RPNToken<T>>, S
                     }
                     stack.push(tokop);
                     neg = true;
-                },
+                }
                 None => return Err(format!("Unexpected character: {}", tok)),
             }
         }

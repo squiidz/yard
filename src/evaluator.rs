@@ -1,6 +1,6 @@
-use std::str::FromStr;
 use num::Num;
-use token::{RPNToken, Operator};
+use std::str::FromStr;
+use token::{Operator, RPNToken};
 
 /// eval process RPNToken provided by the parser and returned the value of the operation.
 /// #Example
@@ -8,7 +8,7 @@ use token::{RPNToken, Operator};
 /// extern crate yard;
 /// use yard::{parser, evaluator};
 ///
-/// fn main() {
+/// fn example() {
 ///     let code = "3 + 4";
 ///     if let Ok(tokens) = parser::parse(&code) {
 ///         let result = evaluator::eval::<i32>(&tokens);
@@ -17,34 +17,33 @@ use token::{RPNToken, Operator};
 /// }
 /// ```
 /// for normal usage, evaluate should be use instead.
-pub fn eval<T: Num + FromStr + Clone + Into<f64>>(tokens: &[RPNToken<T>]) -> T {
+pub fn eval<T>(tokens: &[RPNToken<T>]) -> T
+where
+    T: Num + FromStr + Clone + Into<f64>,
+{
     let mut stack: Vec<T> = Vec::new();
     for t in tokens {
         match t {
             RPNToken::Operator(Operator::PLUS) => {
-                let n1 = stack.pop().expect("Unbalanced addition");
-                let n2 = stack.pop().expect("Unbalanced addition");
-                stack.push(n2 + n1);
-            },
+                let n = pop_stack(&mut stack);
+                stack.push(n.1 + n.0);
+            }
             RPNToken::Operator(Operator::MINUS) => {
-                let n1 = stack.pop().expect("Unbalanced substraction");
-                let n2 = stack.pop().expect("Unbalanced substraction");
-                stack.push(n2 - n1);
-            },
+                let n = pop_stack(&mut stack);
+                stack.push(n.1 - n.0);
+            }
             RPNToken::Operator(Operator::MULTIPLY) => {
-                let n1 = stack.pop().expect("Unbalanced multiplication");
-                let n2 = stack.pop().expect("Unbalanced multiplication");
-                stack.push(n2 * n1);
-            },
+                let n = pop_stack(&mut stack);
+                stack.push(n.1 * n.0);
+            }
             RPNToken::Operator(Operator::DIVIDE) => {
-                let n1 = stack.pop().expect("Unbalanced division");
-                let n2 = stack.pop().expect("Unbalanced division");
-                stack.push(n2 / n1);
-            },
+                let n = pop_stack(&mut stack);
+                stack.push(n.1 / n.0);
+            }
             RPNToken::Operator(Operator::POW) => {
-                let n1 = stack.pop().expect("Unbalanced power");
-                let n2 = stack.pop().expect("Unbalanced power");
-                stack.push(num::pow(n2, n1.into() as usize));
+                let n = pop_stack(&mut stack);
+                let res = num::pow(n.1, n.0.into() as usize);
+                stack.push(res);
             }
             RPNToken::Operator(Operator::LPAREN) => panic!("Stray ( in eval"),
             RPNToken::Operator(Operator::RPAREN) => panic!("Stray ) in eval"),
@@ -53,4 +52,10 @@ pub fn eval<T: Num + FromStr + Clone + Into<f64>>(tokens: &[RPNToken<T>]) -> T {
     }
 
     stack.last().unwrap().clone()
+}
+
+fn pop_stack<T: Num + FromStr + Clone + Into<f64>>(stack: &mut Vec<T>) -> (T, T) {
+    let n1 = stack.pop().expect("Unbalanced operation");
+    let n2 = stack.pop().expect("Unbalanced operation");
+    (n1, n2)
 }
